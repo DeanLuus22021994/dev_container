@@ -13,10 +13,12 @@ if (fs.existsSync(envPath)) {
   dotenv.config(); // Fallback to default .env lookup
 }
 
-// Environment variables for GitHub configuration
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+// Environment variables for GitHub configuration using standardized names
+const GITHUB_TOKEN = process.env.PERSONAL_ACCESS_TOKEN || process.env.GITHUB_TOKEN;
 const GITHUB_API_URL = process.env.GITHUB_API_URL || 'https://api.github.com';
 const DEFAULT_BRANCH = process.env.DEFAULT_BRANCH || 'main';
+const OWNER = process.env.OWNER || process.env.GITHUB_OWNER;
+const REPO = process.env.GITHUB_REPO;
 
 /**
  * Utility functions for working with GitHub
@@ -49,19 +51,15 @@ export class GitHubUtils {
    */
   public static async getRepositoryInfo(): Promise<{ owner: string; repo: string } | undefined> {
     try {
-      // First check environment variables
-      const envOwner = process.env.GITHUB_OWNER;
-      const envRepo = process.env.GITHUB_REPO;
-
-      if (envOwner && envRepo) {
+      // First check environment variables using standardized names
+      if (OWNER && REPO) {
         return {
-          owner: envOwner,
-          repo: envRepo,
+          owner: OWNER,
+          repo: REPO,
         };
       }
 
       // Fallback to dynamic retrieval from Git
-      // Dynamically parse the git remote URL
       const gitExtension = vscode.extensions.getExtension('vscode.git');
       if (!gitExtension) {
         throw new Error('Git extension not found');
@@ -73,7 +71,7 @@ export class GitHubUtils {
         throw new Error('No Git repository found');
       }
 
-      const remoteUrl = repo.state.remotes[0]?.fetchUrl;
+      const remoteUrl = repo.state.remotes[0]?.fetchUrl || repo.state.remotes[0]?.pushUrl;
       if (!remoteUrl) {
         throw new Error('No remote URL found');
       }

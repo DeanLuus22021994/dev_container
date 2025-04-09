@@ -31,14 +31,15 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
-          username: deanluus22021994
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ${{ secrets.DOCKER_REGISTRY || 'docker.io' }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: deanluus22021994/cloudbuild
+          images: ${{ secrets.DOCKER_USERNAME }}/cloudbuild
           tags: |
             type=schedule,pattern={{date 'YYYYMMDD'}}
             type=ref,event=branch,prefix=build-
@@ -53,8 +54,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=deanluus22021994/cloudbuild:buildcache
-          cache-to: type=registry,ref=deanluus22021994/cloudbuild:buildcache,mode=max
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/cloudbuild:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/cloudbuild:buildcache,mode=max
           build-args: |
             BUILDKIT_INLINE_CACHE=1
             USER_UID=1000
