@@ -1,0 +1,44 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "project": ["./tsconfig.json", "./tsconfig.test.json"]
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "rules": {
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "no-console": ["warn", { "allow": ["warn", "error", "info"] }]
+  },
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "env": {
+        "node": true,
+        "es2022": true,
+        "jest": true
+      },
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+      }
+    },
+    {
+      "files": ["tests/**/*.ts"],
+      "env": {
+        "node": true,
+        "jest": true
+      },
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    }
+  ]
+}

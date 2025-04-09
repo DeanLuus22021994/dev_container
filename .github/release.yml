@@ -1,0 +1,33 @@
+changelog:
+  exclude:
+    labels:
+      - "skip-changelog"
+      - "duplicate"
+  categories:
+    - title: "🚀 Features"
+      labels:
+        - "feature"
+        - "enhancement"
+    - title: "🐛 Bug Fixes"
+      labels:
+        - "bug"
+        - "fix"
+    - title: "🔧 Maintenance"
+      labels:
+        - "chore"
+        - "documentation"
+        - "dependencies"
+    - title: "💡 Agent Updates"
+      labels:
+        - "agent"
+    - title: "📝 Other Changes"
+      labels:
+        - "*"
+
+# .github/CODEOWNERS
+* @project-admin
+/.github/ @team-devops
+/agent/ @team-agent-maintainers
+/src/ @team-extension-maintainers
+/tests/ @team-qa
+/docs/ @team-docs

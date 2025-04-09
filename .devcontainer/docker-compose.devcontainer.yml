@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # Override the development container configuration
+  app:
+    # Use prebuilt image
+    image: deanluus22021994/cloudbuild:latest
+    # Reference the central .env file at project root
+    env_file:
+      - ../.env
+    # Use VSCode devcontainer custom entrypoint
+    entrypoint: ['/usr/local/share/docker-init.sh']
+    # For VSCode development container
+    command: sleep infinity
+    # Development-specific ports
+    ports:
+      - '3000:3000' # App port
+      - '9229:9229' # Node.js debugging
+      - '35729:35729' # Live reload
+    # Development-specific volumes
+    volumes:
+      - ..:/workspace:cached
+      - ${HOME}/.ssh:/home/vscode/.ssh:ro
+      # For Docker-in-Docker or Docker-from-Docker
+      - /var/run/docker.sock:/var/run/docker.sock
+    # Optional: specify development resources
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G

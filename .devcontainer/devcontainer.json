@@ -1,0 +1,121 @@
+{
+  "name": "Ultra-Optimized Development Environment",
+  // Use pre-built image instead of building from Dockerfile
+  "image": "deanluus22021994/cloudbuild:latest",
+  "workspaceFolder": "/workspace",
+
+  // Features to add to the dev container - reduced list since base image includes many tools
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true,
+      "dockerDaemonConfigFile": "/etc/docker/daemon.json"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": false
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    }
+  },
+
+  // Extensions to install in the container
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Docker & Containers
+        "ms-azuretools.vscode-docker",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+
+        // Programming Languages
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+
+        // Git & Version Control
+        "eamodio.gitlens",
+        "GitHub.vscode-pull-request-github",
+
+        // AI & Productivity
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+
+        // Testing & Quality
+        "ryanluker.vscode-coverage-gutters",
+
+        // DevOps & Infra
+        "redhat.vscode-yaml",
+        "HashiCorp.terraform",
+
+        // Code Quality & Documentation
+        "yzhang.markdown-all-in-one",
+        "streetsidesoftware.code-spell-checker",
+        "EditorConfig.EditorConfig",
+
+        // Snippets & Utilities
+        "humao.rest-client",
+        "bierner.github-markdown-preview"
+      ],
+      "settings": {
+        // Editor behavior
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "always",
+          "source.organizeImports": "always"
+        },
+        "editor.rulers": [88, 100],
+        "editor.tabSize": 2,
+
+        // Files
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.eol": "\n",
+
+        // Terminal
+        "terminal.integrated.defaultProfile.linux": "zsh",
+
+        // Git
+        "git.autofetch": true,
+        "git.enableSmartCommit": true,
+
+        // Docker
+        "docker.showStartPage": false,
+        "docker.enableTelemetry": false
+      }
+    }
+  },
+
+  // Lifecycle scripts
+  "initializeCommand": "if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi",
+  "postCreateCommand": "bash -c 'if [ -f \"${containerWorkspaceFolder}/.env\" ]; then set -a; source \"${containerWorkspaceFolder}/.env\"; set +a; fi && echo \"Environment loaded successfully\" > /workspace/.devcontainer/logs/container-ready.log'",
+
+  // Environment variables loaded from the centralized .env file
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:${containerWorkspaceFolder}/bin:${containerWorkspaceFolder}/node_modules/.bin",
+    "DOTENV_CONFIG_PATH": "${containerWorkspaceFolder}/.env"
+  },
+
+  // Advanced mount configurations with caching
+  "mounts": [
+    "source=${localWorkspaceFolder}/.env,target=/workspace/.env,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind,consistency=consistent"
+  ],
+
+  // Key ports to forward
+  "forwardPorts": [
+    3000, // Web app
+    8080, // Alternative web app
+    5432 // PostgreSQL
+  ],
+
+  // Run with elevated privileges
+  "runArgs": ["--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"],
+
+  // Remote user configuration
+  "remoteUser": "vscode",
+  "containerUser": "vscode"
+}
