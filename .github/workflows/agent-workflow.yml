@@ -28,7 +28,7 @@ jobs:
         run: npm install chalk
 
       - name: Validate environment variables
-        run: node scripts/validate-env.js
+        run: node ./scripts/validate-env.js
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
