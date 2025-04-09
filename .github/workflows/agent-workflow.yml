@@ -4,17 +4,42 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - "agent/**"
-      - ".github/workflows/agent-workflow.yml"
+      - 'agent/**'
+      - '.github/workflows/agent-workflow.yml'
   pull_request:
     branches: [main, develop]
     paths:
-      - "agent/**"
-      - ".github/workflows/agent-workflow.yml"
+      - 'agent/**'
+      - '.github/workflows/agent-workflow.yml'
   workflow_dispatch:
 
 jobs:
+  validate-env:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install validation script dependencies
+        run: npm install chalk
+
+      - name: Validate environment variables
+        run: node scripts/validate-env.js
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+          DOCKER_HOST: ${{ secrets.DOCKER_HOST }}
+          SSH_DEV_CONTAINER_REPO: ${{ secrets.SSH_DEV_CONTAINER_REPO }}
+          OWNER: ${{ secrets.OWNER }}
+
   build-and-test:
+    needs: validate-env
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,9 +51,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
-          cache: "npm"
-          cache-dependency-path: "./agent/package-lock.json"
+          node-version: '16.x'
+          cache: 'npm'
+          cache-dependency-path: './agent/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
