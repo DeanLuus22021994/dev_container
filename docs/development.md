@@ -19,6 +19,7 @@ This project uses [Visual Studio Code Dev Containers](https://code.visualstudio.
 ### First-time Setup
 
 1. Ensure you have Docker and VS Code with Remote Development extensions installed
+
 2. Clone the repository:
 
    ```bash
@@ -33,6 +34,7 @@ This project uses [Visual Studio Code Dev Containers](https://code.visualstudio.
    ```
 
 4. When prompted, click "Reopen in Container" or use Command Palette (F1) → "Remote-Containers: Reopen in Container"
+
 5. Wait for the container build to complete
 
 ### Container Customization
@@ -40,6 +42,7 @@ This project uses [Visual Studio Code Dev Containers](https://code.visualstudio.
 The dev container configuration is defined in `.devcontainer/devcontainer.json` and `.devcontainer/Dockerfile`.
 
 If you need to add dependencies:
+
 1. Modify the Dockerfile to include your required packages
 2. Rebuild the container: Command Palette (F1) → "Remote-Containers: Rebuild Container"
 
@@ -48,6 +51,7 @@ If you need to add dependencies:
 ### Environment Setup
 
 1. Copy `.env.example` to `.env` and populate with your values (see [CI/CD Setup Guide](cicd-setup.md))
+
 2. Install dependencies:
 
    ```bash
