@@ -4,12 +4,12 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - 'agent/**'
+      - 'src/**'
       - '.github/workflows/agent-workflow.yml'
   pull_request:
     branches: [main, develop]
     paths:
-      - 'agent/**'
+      - 'src/**'
       - '.github/workflows/agent-workflow.yml'
   workflow_dispatch:
 
@@ -41,9 +41,6 @@ jobs:
   build-and-test:
     needs: validate-env
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./agent
 
     steps:
       - uses: actions/checkout@v3
@@ -53,7 +50,6 @@ jobs:
         with:
           node-version: '16.x'
           cache: 'npm'
-          cache-dependency-path: './agent/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
@@ -64,22 +60,23 @@ jobs:
       - name: Run unit tests
         run: npm test
 
-      - name: Build agent
-        run: npm run build
+      - name: Build
+        run: npm run compile
+
+      - name: Create dist directory if it doesn't exist
+        run: mkdir -p ./out
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
-          name: agent-build
-          path: ./agent/dist
+          name: build-output
+          path: ./out
+          if-no-files-found: error
 
   docker:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
-    defaults:
-      run:
-        working-directory: ./agent
 
     steps:
       - uses: actions/checkout@v3
@@ -87,8 +84,8 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
-          name: agent-build
-          path: ./agent/dist
+          name: build-output
+          path: ./out
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -104,7 +101,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{ github.repository }}/agent
+          images: ghcr.io/${{ github.repository }}/cicd-automation
           tags: |
             type=sha,format=short
             type=ref,event=branch
@@ -115,7 +112,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./agent
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
