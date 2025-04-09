@@ -1,18 +1,28 @@
 {
   "compilerOptions": {
+    "target": "es2021",
     "module": "commonjs",
-    "target": "ES2020",
-    "outDir": "out",
-    "lib": ["ES2020"],
-    "sourceMap": true,
-    "rootDir": ".",
-    "strict": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedParameters": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "out",
+    "declaration": true,
+    "sourceMap": true
   },
-  "include": ["src/**/*", "tests/**/*"],
-  "exclude": ["node_modules", ".vscode-test"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "tests/**/*.ts",
+    "tests/**/*.js",
+    "scripts/**/*.js",
+    "jest.config.js",
+    "jest.integration.config.js",
+    "*.js"
+  ],
+  "exclude": ["node_modules", "out", ".vscode"]
 }

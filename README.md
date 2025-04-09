@@ -2,114 +2,42 @@
 
 This project demonstrates a fully automated CI/CD setup using GitHub Actions and development containers for consistent development environments.
 
-## Features
+## Table of Contents
 
-- Development container for consistent development environment
-- CI/CD automation using GitHub Actions
-- Node.js Express sample application
-- Automated testing with Jest
-- Code quality with ESLint
+- [Overview](#overview)
+- [Documentation](#documentation)
+- [Quick Start](#quick-start)
+- [Repository Structure](#repository-structure)
+
+## Overview
+
+This repository contains a CI/CD automation setup focused on development containers with:
+
+- GitHub Actions workflow integration
+- Jest-based testing framework
 - Docker containerization
-- Continuous deployment workflow
+- Environment variable validation
 
-## Getting Started
+For complete details on features and capabilities, see the [Documentation](#documentation) section.
 
-### Prerequisites
+## Documentation
 
-- [Docker](https://www.docker.com/products/docker-desktop)
-- [Visual Studio Code](https://code.visualstudio.com/)
-- [VS Code Remote Development Extension Pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
-- [Git](https://git-scm.com/downloads)
+All project documentation is organized in the [`docs/`](docs/) folder. See the [Documentation Index](docs/README.md) for a complete guide.
 
-### Development Environment Setup
+| Document | Description |
+|----------|-------------|
+| [CI/CD Setup Guide](docs/cicd-setup.md) | Configuration for CI/CD workflows and environment variables |
+| [Development Guide](docs/development.md) | Development workflow and best practices |
+| [Testing Guide](docs/testing.md) | Testing strategies and configuration |
+| [Troubleshooting](docs/troubleshooting.md) | Common issues and their solutions |
 
-1. Clone this repository:
+## Quick Start
 
-   ```bash
-   git clone https://github.com/your-username/cicd-automation.git
-   cd cicd-automation
-   ```
+1. Ensure prerequisites are installed (see [Development Guide](docs/development.md#dev-container-setup))
+2. Clone this repository
+3. Configure environment variables (see [CI/CD Setup Guide](docs/cicd-setup.md))
+4. Open in VS Code and use "Reopen in Container" when prompted
 
-2. Open the project in VS Code:
+## Repository Structure
 
-   ```bash
-   code .
-   ```
-
-3. When prompted, click "Reopen in Container" or use the command palette (F1) and select "Remote-Containers: Reopen in Container"
-
-4. VS Code will build and start the dev container which includes all necessary dependencies.
-
-## Development Workflow
-
-1. Make your changes to the source code
-2. Run tests locally:
-
-   ```bash
-   npm test
-   ```
-
-3. Check code quality:
-
-   ```bash
-   npm run lint
-   ```
-
-4. Commit and push your changes to GitHub
-5. The CI/CD pipelines will automatically run:
-   - CI pipeline tests and builds the application
-   - CD pipeline deploys the application if all tests pass
-
-## CI/CD Pipelines
-
-### CI Pipeline (.github/workflows/ci.yml)
-
-The Continuous Integration pipeline runs automatically on pull requests and pushes to the main branch:
-
-1. Checks out the code
-2. Sets up Node.js
-3. Installs dependencies
-4. Runs linting
-5. Runs automated tests
-6. Builds a Docker image
-7. Saves the Docker image as an artifact
-
-### CD Pipeline (.github/workflows/cd.yml)
-
-The Continuous Deployment pipeline runs automatically after the CI pipeline successfully completes:
-
-1. Downloads the Docker image artifact from the CI pipeline
-2. Logs in to the container registry
-3. Tags and pushes the Docker image
-4. Deploys the application to the production environment
-
-## Project Structure
-
-```plaintext
-.
-├── .devcontainer/         # Development container configuration
-│   ├── devcontainer.json  # Dev container settings
-│   └── Dockerfile         # Dev container definition
-├── .github/               # GitHub configuration
-│   └── workflows/         # GitHub Actions workflows
-│       ├── ci.yml         # CI pipeline
-│       └── cd.yml         # CD pipeline
-├── docs/                  # Documentation
-├── src/                   # Source code
-│   └── index.js           # Main application entry point
-├── tests/                 # Test files
-│   └── index.test.js      # Tests for the application
-├── .eslintrc.json         # ESLint configuration
-├── Dockerfile             # Production container definition
-├── package.json           # Node.js dependencies and scripts
-└── README.md              # This documentation file
-```
-
-## Customizing for Your Project
-
-1. Update the package.json with your project details
-2. Modify the src/index.js to implement your application logic
-3. Update the Dockerfile if you need additional dependencies
-4. Customize the CI/CD workflows in .github/workflows/
-5. Configure your deployment target in the CD workflow
-"# dev_container" 
+See [Documentation Index](docs/README.md) for a detailed breakdown of the repository structure and available documentation.

@@ -1,16 +1,20 @@
-name: Agent Workflow
+name: Devcontainer Automation Workflow
 
 on:
   push:
     branches: [main, develop]
     paths:
       - 'src/**'
+      - 'tests/**'
       - '.github/workflows/agent-workflow.yml'
+      - 'package.json'
   pull_request:
     branches: [main, develop]
     paths:
       - 'src/**'
+      - 'tests/**'
       - '.github/workflows/agent-workflow.yml'
+      - 'package.json'
   workflow_dispatch:
 
 jobs:
@@ -27,8 +31,14 @@ jobs:
       - name: Install validation script dependencies
         run: npm install chalk
 
+      - name: Debug script location
+        run: |
+          pwd
+          ls -la
+          ls -la scripts/
+
       - name: Validate environment variables
-        run: node ./scripts/validate-env.js
+        run: node $GITHUB_WORKSPACE/scripts/validate-env.js
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
@@ -58,7 +68,10 @@ jobs:
         run: npm run lint
 
       - name: Run unit tests
-        run: npm test
+        run: npx jest
+
+      - name: Run integration tests
+        run: npx jest --config jest.integration.config.js
 
       - name: Build
         run: npm run compile
@@ -73,7 +86,7 @@ jobs:
           path: ./out
           if-no-files-found: error
 
-  docker:
+  devcontainer-build:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
@@ -93,15 +106,15 @@ jobs:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
       - name: Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{ github.repository }}/cicd-automation
+          images: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.OWNER }}/devcontainer
           tags: |
             type=sha,format=short
             type=ref,event=branch
