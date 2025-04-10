@@ -8,6 +8,14 @@
 import * as vscode from 'vscode';
 import { GitHubUtils } from '../../src/utils/githubUtils';
 
+// Force setting the test environment marker
+process.env.NODE_ENV = 'test';
+
+// Set test environment variables directly
+process.env.GITHUB_TOKEN = 'mock_github_token_for_testing';
+process.env.GITHUB_OWNER = 'your-username';
+process.env.GITHUB_REPO = 'cicd-automation';
+
 // For integration tests, use longer timeouts
 jest.setTimeout(30000);
 
@@ -27,6 +35,10 @@ describe('GitHub Workflows Integration', () => {
         expect(repoInfo.repo).toBeDefined();
         expect(typeof repoInfo.owner).toBe('string');
         expect(typeof repoInfo.repo).toBe('string');
+
+        // Verify values match our test environment
+        expect(repoInfo.owner).toBe('your-username');
+        expect(repoInfo.repo).toBe('cicd-automation');
       }
     });
   });

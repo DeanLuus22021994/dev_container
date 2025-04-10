@@ -2,11 +2,18 @@ import * as vscode from 'vscode';
 import * as sinon from 'sinon';
 import { GitHubUtils } from '../../src/utils/githubUtils';
 
+// Force setting the test environment marker
+process.env.NODE_ENV = 'test';
+
 describe('GitHubUtils', () => {
   let sandbox: sinon.SinonSandbox;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    // Set test environment variables directly for the tests
+    process.env.GITHUB_TOKEN = 'mock_github_token_for_testing';
+    process.env.GITHUB_OWNER = 'your-username';
+    process.env.GITHUB_REPO = 'cicd-automation';
   });
 
   afterEach(() => {
@@ -55,10 +62,19 @@ describe('GitHubUtils', () => {
       // Mock dependencies
       const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
       const getRepoInfoStub = sandbox.stub(GitHubUtils, 'getRepositoryInfo');
-      getRepoInfoStub.resolves({ owner: 'test-owner', repo: 'test-repo' });
+      getRepoInfoStub.resolves({ owner: 'your-username', repo: 'cicd-automation' });
 
-      // Mock Octokit initialization
-      sandbox.stub(GitHubUtils as any, 'initializeOctokit');
+      // Mock Octokit's createWorkflowDispatch
+      const octokitMock = {
+        actions: {
+          createWorkflowDispatch: sandbox.stub().resolves({ status: 204 }),
+        },
+      };
+
+      // Override the actual Octokit initialization
+      sandbox.stub(GitHubUtils as any, 'initializeOctokit').callsFake(function (this: any) {
+        this.octokit = octokitMock;
+      });
 
       // Call the method
       const result = await GitHubUtils.dispatchWorkflow('test-workflow.yml');
@@ -73,10 +89,19 @@ describe('GitHubUtils', () => {
       // Mock dependencies
       const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
       const getRepoInfoStub = sandbox.stub(GitHubUtils, 'getRepositoryInfo');
-      getRepoInfoStub.resolves({ owner: 'test-owner', repo: 'test-repo' });
+      getRepoInfoStub.resolves({ owner: 'your-username', repo: 'cicd-automation' });
 
-      // Mock Octokit initialization
-      sandbox.stub(GitHubUtils as any, 'initializeOctokit');
+      // Mock Octokit's createWorkflowDispatch
+      const octokitMock = {
+        actions: {
+          createWorkflowDispatch: sandbox.stub().resolves({ status: 204 }),
+        },
+      };
+
+      // Override the actual Octokit initialization
+      sandbox.stub(GitHubUtils as any, 'initializeOctokit').callsFake(function (this: any) {
+        this.octokit = octokitMock;
+      });
 
       // Create test inputs
       const inputs = {
@@ -110,28 +135,31 @@ describe('GitHubUtils', () => {
       // Mock dependencies
       const showErrorStub = sandbox.stub(vscode.window, 'showErrorMessage');
       const getRepoInfoStub = sandbox.stub(GitHubUtils, 'getRepositoryInfo');
-      getRepoInfoStub.resolves({ owner: 'test-owner', repo: 'test-repo' });
+      getRepoInfoStub.resolves({ owner: 'your-username', repo: 'cicd-automation' });
 
-      // We need to fix the implementation in GitHubUtils.ts to return false when there's an API error
-      // But in the meantime, let's modify our test to match the current behavior
-      // First save the original implementation
-      const originalInitializeOctokit = GitHubUtils['initializeOctokit'];
+      // Mock the createWorkflowDispatch function to throw an error
+      const octokitMock = {
+        actions: {
+          createWorkflowDispatch: sandbox.stub().throws(new Error('API error')),
+        },
+      };
 
-      // Overwrite with a version that throws
-      GitHubUtils['initializeOctokit'] = () => {
-        throw new Error('API error');
+      // Override the Octokit initialization
+      const originalInitializeOctokit = (GitHubUtils as any)['initializeOctokit'];
+      (GitHubUtils as any)['initializeOctokit'] = function (this: any) {
+        this.octokit = octokitMock;
       };
 
       // Call the method
       const result = await GitHubUtils.dispatchWorkflow('test-workflow.yml');
 
-      // Verify the result - should be false as per our expected behavior
+      // Verify the result
       expect(result).toBe(false);
       expect(showErrorStub.calledOnce).toBe(true);
       expect(showErrorStub.firstCall.args[0]).toContain('API error');
 
       // Restore the original implementation
-      GitHubUtils['initializeOctokit'] = originalInitializeOctokit;
+      (GitHubUtils as any)['initializeOctokit'] = originalInitializeOctokit;
     });
   });
 });

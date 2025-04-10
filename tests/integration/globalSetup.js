@@ -2,9 +2,9 @@
  * Global setup for integration tests
  * Sets up the environment for devcontainer automation testing
  */
-import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
 // eslint-disable-next-line no-console
 module.exports = async () => {

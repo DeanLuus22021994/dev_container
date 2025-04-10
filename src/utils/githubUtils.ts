@@ -4,10 +4,20 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 import * as fs from 'fs';
 
-// Load environment variables from the central .env file
-const envPath = path.resolve(__dirname, '../../../.env');
+// Check if we're in a test environment
+const isTestEnv = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID;
+
+// First try to load from the root directory of the project
+const rootPath = path.resolve(__dirname, '../../');
+const testEnvPath = path.join(rootPath, '.env.test');
+const regularEnvPath = path.join(rootPath, '.env');
+
+// Load environment variables from test .env file if running tests
+const envPath = isTestEnv && fs.existsSync(testEnvPath) ? testEnvPath : regularEnvPath;
+
 if (fs.existsSync(envPath)) {
   dotenv.config({ path: envPath });
+  console.log('Loaded environment from:', envPath);
 } else {
   console.warn('Warning: .env file not found at:', envPath);
   dotenv.config(); // Fallback to default .env lookup
