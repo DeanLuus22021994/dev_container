@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - DOCKER_HOST=${DOCKER_HOST}
+        - DOCKER_REGISTRY=${DOCKER_REGISTRY}
+        - DOCKER_USERNAME=${DOCKER_USERNAME}
+        - OWNER=${OWNER}
+        - SSH_DEV_CONTAINER_REPO=${SSH_DEV_CONTAINER_REPO}
+    ports:
+      - "3000:3000"
+      - "11434:11434"
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - OLLAMA_HOST=http://localhost:11434
+      # Passing sensitive information as environment variables at runtime
+      - PERSONAL_ACCESS_TOKEN=${PERSONAL_ACCESS_TOKEN}
+      - DOCKER_ACCESS_TOKEN=${DOCKER_ACCESS_TOKEN}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    networks:
+      - cicd-network
+
+  # Optional Ollama service if you want to run it separately
+  # Uncomment to use a separate container for Ollama
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama-data:/root/.ollama
+  #   networks:
+  #     - cicd-network
+
+networks:
+  cicd-network:
+    driver: bridge
+
+volumes:
+  ollama-data:

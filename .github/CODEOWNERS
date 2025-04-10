@@ -1,8 +1,15 @@
-# Default owners for everything
+# CODEOWNERS
+
 * @project-admin
 
-# Documentation
+## Documentation
+
 /docs/ @team-docs
 
-# Source code
+## Source code
+
 /src/ @team-developers
+
+## MCP Tools
+
+/.vscode/mcp.json @team-developers
