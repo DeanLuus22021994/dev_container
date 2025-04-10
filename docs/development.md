@@ -121,7 +121,7 @@ We follow a standard Git workflow:
    git add .
    git commit -m "feat: add new feature"
    ```
-   
+
    We follow [Conventional Commits](https://www.conventionalcommits.org/) format:
    - `feat:` for new features
    - `fix:` for bug fixes

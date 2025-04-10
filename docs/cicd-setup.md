@@ -55,7 +55,7 @@ USE_ACTUAL_CONTAINERS=false
 CLEANUP_TEST_IMAGES=false
 ```
 
-2. Load these variables into your local environment:
+1. Load these variables into your local environment:
 
 ```bash
 # On Windows (PowerShell)
