@@ -1,0 +1,51 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/out": false
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/out": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "yaml": true,
+    "json": true,
+    "jsonc": true,
+    "typescript": true,
+    "javascript": true,
+    "dockercompose": true,
+    "dockerfile": true
+  },
+  "github.copilot.advanced": {
+    "mcp.gateway.url": "http://localhost:8080",
+    "mcp.enabled": true,
+    "instructionFile.repositoryInfoType": "verbose"
+  },
+  "jest.runMode": "watch",
+  "jest.jestCommandLine": "npm test --",
+  "docker.imageBuildContextPath": "${workspaceFolder}",
+  "terminal.integrated.env.windows": {
+    "MCP_GATEWAY_URL": "http://localhost:8080",
+    "PHI_MODEL": "phi4-mini",
+    "OLLAMA_API_URL": "http://localhost:11434"
+  },
+  "terminal.integrated.env.linux": {
+    "MCP_GATEWAY_URL": "http://localhost:8080",
+    "PHI_MODEL": "phi4-mini",
+    "OLLAMA_API_URL": "http://localhost:11434"
+  },
+  "terminal.integrated.env.osx": {
+    "MCP_GATEWAY_URL": "http://localhost:8080",
+    "PHI_MODEL": "phi4-mini",
+    "OLLAMA_API_URL": "http://localhost:11434"
+  }
+}

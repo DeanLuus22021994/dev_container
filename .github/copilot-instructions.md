@@ -1,12 +1,53 @@
-# CODING GUIDELINES
+# GitHub Copilot Instructions
 
-Follow these principles:
+## Project Overview
 
-- Write clear and concise code adhering to DRY, KISS, SOLID, and Clean Code.
-- Use TDD/BDD for robust testing.
-- Always test for full code coverage using Jest as specified in `mcp.json`.
-- Ensure documentation is updated after successful testing, as outlined in `mcp.json`.
-- Maintain traceability and retrospectives in documentation for the next iteration, as outlined in `mcp.json`.
-- Refer to MCP tools in `mcp.json`, including Docker integration and Ollama PHI 4 Mini model usage, and utilize them where applicable.
-- Prioritize secure coding, error handling, and performance optimization.
-- Conduct regular code reviews and ensure CI/CD practices for efficient development and deployment.
+Brief description of the dev_container project and its primary purpose - a development environment with MCP integration and CI/CD automation.
+
+## Repository Structure
+
+- `.vscode/`: VS Code configuration files
+- `.github/`: GitHub workflows and templates
+- `docs/`: Documentation
+- `src/`: Source code
+- [other key directories]
+
+## Technology Stack
+
+- Node.js (TypeScript/JavaScript)
+- Docker/Docker Compose
+- Ollama (phi4-mini model)
+- MCP (Model Context Protocol)
+- GitHub Actions CI/CD
+
+## Coding Standards
+
+- Follow DRY, KISS, SOLID principles
+- Use TDD/BDD for testing
+- Full test coverage with Jest
+- Maintain documentation
+
+## Team Structure
+
+- @team-extension-maintainers: VS Code extension core
+- @team-agent-maintainers: Agent component
+- @team-docs: Documentation
+- @team-devops: CI/CD infrastructure
+- @team-qa: Testing
+
+## Development Workflow
+
+[Describe your development workflow]
+
+## MCP Integration
+
+The project uses MCP with Docker containers for:
+
+- Ollama model integration (phi4-mini)
+- GitHub server integration
+- VS Code server
+- Code interpretation and analysis
+
+## Common Tasks
+
+[List common development tasks for Copilot to help with]

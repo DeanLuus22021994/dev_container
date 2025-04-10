@@ -13,7 +13,8 @@
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",
         "!**/node_modules/**"
-      ]
+      ],
+      "preLaunchTask": "npm: compile"
     },
     {
       "type": "node",
@@ -36,6 +37,51 @@
         "${workspaceFolder}/out/**/*.js"
       ],
       "preLaunchTask": "npm: compile"
+    },
+    {
+      "name": "Extension with MCP",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/out/**/*.js"
+      ],
+      "env": {
+        "MCP_GATEWAY_URL": "http://localhost:8080",
+        "MCP_ENABLED": "true",
+        "PHI_MODEL": "phi4-mini",
+        "OLLAMA_API_URL": "http://localhost:11434"
+      },
+      "preLaunchTask": "mcp: start all"
+    },
+    {
+      "name": "Debug Integration Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--runInBand",
+        "--config",
+        "${workspaceFolder}/jest.config.js",
+        "${workspaceFolder}/tests/integration"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "MCP_GATEWAY_URL": "http://localhost:8080",
+        "MCP_ENABLED": "true",
+        "PHI_MODEL": "phi4-mini"
+      },
+      "preLaunchTask": "mcp: start all"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Extension + MCP Servers",
+      "configurations": ["Extension with MCP"],
+      "stopAll": true
     }
   ]
 }

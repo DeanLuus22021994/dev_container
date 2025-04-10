@@ -17,10 +17,12 @@ This project provides a minimal setup for CI/CD automation with focus on:
 
 1. Clone this repository
 2. Copy `.env.example` to `.env` and configure your environment variables:
+
    ```bash
    cp .env.example .env
    # Edit .env with your actual values
    ```
+
 3. Open in VS Code and use "Reopen in Container" when prompted
 4. Run `npm install` if not automatically done
 
@@ -41,11 +43,12 @@ This project comes with Ollama PHI 4 Mini model support:
 
 1. The model is pre-configured in the DevContainer
 2. To start the PHI 4 Mini model, use the "ollama: start phi model" task in VS Code
-3. The model will be available at http://localhost:11434
+3. The model will be available at <http://localhost:11434>
 
 ## Environment Variables
 
 All necessary environment variables are already configured both on the GitHub repository and locally:
+
 - `PERSONAL_ACCESS_TOKEN` - GitHub Personal Access Token
 - `DOCKER_ACCESS_TOKEN` - Docker registry access token
 - `DOCKER_USERNAME` - Docker username
@@ -57,6 +60,7 @@ All necessary environment variables are already configured both on the GitHub re
 ## Documentation
 
 See the [docs](docs/) folder for detailed information:
+
 - [CI/CD Setup Guide](docs/cicd-setup.md)
 - [Development Guide](docs/development.md)
 - [Testing Documentation](docs/testing.md)
