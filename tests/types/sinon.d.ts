@@ -24,7 +24,20 @@ declare global {
   }
 }
 
-// Make SinonSandbox available to tests
+// Add missing SinonSandbox methods
 declare module 'sinon' {
-  export interface SinonSandbox extends sinon.SinonSandbox {}
+  interface SinonSandbox {
+    /**
+     * Restores all fakes created through sandbox.
+     */
+    restore(): void;
+    
+    /**
+     * Creates a new fake that will replace obj[method] with a function that will invoke callback when called.
+     */
+    stub(): sinon.SinonStub;
+    stub(obj: any): sinon.SinonStub;
+    stub(obj: any, method: string): sinon.SinonStub;
+    stub(obj: any, method: string, func: Function): sinon.SinonStub;
+  }
 }

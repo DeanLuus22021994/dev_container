@@ -1,12 +1,25 @@
 import * as vscode from 'vscode';
 import * as sinon from 'sinon';
 import { GitHubUtils } from '../../src/utils/githubUtils';
+import { Octokit } from '@octokit/rest';
 
 // Force setting the test environment marker
 process.env.NODE_ENV = 'test';
 
+// Type for accessing private members of GitHubUtils in tests
+interface GitHubUtilsTest {
+  octokit: Octokit | { 
+    actions: { 
+      createWorkflowDispatch: ReturnType<typeof sinon.stub>
+    } 
+  };
+  initializeOctokit(): void;
+}
+
 describe('GitHubUtils', () => {
   let sandbox: sinon.SinonSandbox;
+  // Cast to our test interface only for testing purposes
+  const GitHubUtilsForTest = GitHubUtils as unknown as GitHubUtilsTest;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -72,8 +85,9 @@ describe('GitHubUtils', () => {
       };
 
       // Override the actual Octokit initialization
-      sandbox.stub(GitHubUtils as any, 'initializeOctokit').callsFake(function (this: any) {
-        this.octokit = octokitMock;
+      sandbox.stub(GitHubUtilsForTest, 'initializeOctokit').callsFake(function() {
+        // Access private member through our test interface
+        GitHubUtilsForTest.octokit = octokitMock;
       });
 
       // Call the method
@@ -99,8 +113,9 @@ describe('GitHubUtils', () => {
       };
 
       // Override the actual Octokit initialization
-      sandbox.stub(GitHubUtils as any, 'initializeOctokit').callsFake(function (this: any) {
-        this.octokit = octokitMock;
+      sandbox.stub(GitHubUtilsForTest, 'initializeOctokit').callsFake(function() {
+        // Access private member through our test interface
+        GitHubUtilsForTest.octokit = octokitMock;
       });
 
       // Create test inputs
@@ -144,11 +159,13 @@ describe('GitHubUtils', () => {
         },
       };
 
+      // Save original value for restoration
+      const originalOctokit = GitHubUtilsForTest.octokit;
+      
       // Override the Octokit initialization
-      const originalInitializeOctokit = (GitHubUtils as any)['initializeOctokit'];
-      (GitHubUtils as any)['initializeOctokit'] = function (this: any) {
-        this.octokit = octokitMock;
-      };
+      sandbox.stub(GitHubUtilsForTest, 'initializeOctokit').callsFake(function() {
+        GitHubUtilsForTest.octokit = octokitMock;
+      });
 
       // Call the method
       const result = await GitHubUtils.dispatchWorkflow('test-workflow.yml');
@@ -158,8 +175,8 @@ describe('GitHubUtils', () => {
       expect(showErrorStub.calledOnce).toBe(true);
       expect(showErrorStub.firstCall.args[0]).toContain('API error');
 
-      // Restore the original implementation
-      (GitHubUtils as any)['initializeOctokit'] = originalInitializeOctokit;
+      // Restore original value
+      GitHubUtilsForTest.octokit = originalOctokit;
     });
   });
 });
