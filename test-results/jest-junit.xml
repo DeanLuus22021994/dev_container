@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="2" failures="0" errors="0" time="3.904">
+  <testsuite name="Express App Endpoints" errors="0" failures="0" skipped="0" timestamp="2025-04-10T11:07:27" time="1.126" tests="2">
+    <testcase classname="Express App Endpoints GET / should return welcome message" name="Express App Endpoints GET / should return welcome message" time="0.035">
+    </testcase>
+    <testcase classname="Express App Endpoints GET /health should return health status" name="Express App Endpoints GET /health should return health status" time="0.011">
+    </testcase>
+  </testsuite>
+</testsuites>

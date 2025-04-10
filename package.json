@@ -39,7 +39,12 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "test": "jest",
-    "test:integration": "jest --config jest.integration.config.js",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest --config jest.integration.js",
+    "test:ci": "jest --ci --reporters=default --reporters=jest-junit",
+    "test:update-snapshots": "jest --updateSnapshot",
+    "test:clear-cache": "jest --clearCache",
     
     "mcp:start": "npx jest --config jest.mcp.config.js --testPathPattern=tests/mcp/system-test.js --testNamePattern=\"MCP Environment|MCP Container Startup\"",
     "mcp:stop": "npx jest --config jest.mcp.config.js --testPathPattern=tests/mcp/system-test.js --testNamePattern=\"MCP System Cleanup\" --env.MCP_TEST_CLEANUP=true",

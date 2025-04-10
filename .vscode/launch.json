@@ -1,0 +1,28 @@
+{
+  "name": "Debug Tests",
+  "type": "node",
+  "request": "launch",
+  "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+  "args": ["--runInBand", "--watchAll=false", "${file}"],
+  "console": "integratedTerminal",
+  "internalConsoleOptions": "neverOpen"
+},
+{
+  "name": "Debug Integration Tests",
+  "type": "node",
+  "request": "launch",
+  "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+  "args": [
+    "--runInBand",
+    "--config",
+    "${workspaceFolder}/jest.integration.js"
+  ],
+  "console": "integratedTerminal",
+  "internalConsoleOptions": "neverOpen",
+  "env": {
+    "MCP_GATEWAY_URL": "http://localhost:8080",
+    "MCP_ENABLED": "true",
+    "PHI_MODEL": "phi4-mini"
+  },
+  "preLaunchTask": "mcp: start all"
+}
