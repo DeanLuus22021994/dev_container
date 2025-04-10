@@ -44,7 +44,6 @@ jobs:
           DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
-          DOCKER_HOST: ${{ secrets.DOCKER_HOST }}
           SSH_DEV_CONTAINER_REPO: ${{ secrets.SSH_DEV_CONTAINER_REPO }}
           OWNER: ${{ secrets.OWNER }}
 
