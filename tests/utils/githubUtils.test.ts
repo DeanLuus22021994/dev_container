@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as sinon from 'sinon';
-import { GitHubUtils } from '../../src/utils/githubUtils';
+import { GitHubUtilsClass } from '../../src/utils/githubUtils';
 import { Octokit } from '@octokit/rest';
 
 // Force setting the test environment marker
@@ -19,7 +19,7 @@ interface GitHubUtilsTest {
 describe('GitHubUtils', () => {
   let sandbox: sinon.SinonSandbox;
   // Cast to our test interface only for testing purposes
-  const GitHubUtilsForTest = GitHubUtils as unknown as GitHubUtilsTest;
+  const GitHubUtilsForTest = GitHubUtilsClass as unknown as GitHubUtilsTest;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -36,7 +36,7 @@ describe('GitHubUtils', () => {
   describe('getRepositoryInfo', () => {
     it('should return repository information', async () => {
       // Call the method
-      const result = await GitHubUtils.getRepositoryInfo();
+      const result = await GitHubUtilsClass.getRepositoryInfo();
 
       // Verify the result
       expect(result).toEqual({
@@ -47,18 +47,20 @@ describe('GitHubUtils', () => {
 
     it('should handle errors gracefully', async () => {
       // Save the original implementation
-      const originalGetRepositoryInfo = GitHubUtils.getRepositoryInfo;
+      const originalGetRepositoryInfo = GitHubUtilsClass.getRepositoryInfo;
 
       // Mock window.showErrorMessage
-      const showErrorStub = sandbox.stub(vscode.window, 'showErrorMessage');
+      const showErrorStub = sandbox.stub(vscode.window, 'showErrorMessage').callsFake((message: string) => {
+        console.error(message);
+      });
 
       // Replace the implementation with one that throws
-      GitHubUtils.getRepositoryInfo = async () => {
+      GitHubUtilsClass.getRepositoryInfo = async () => {
         throw new Error('Test error');
       };
 
       // Call the method
-      const result = await GitHubUtils.getRepositoryInfo();
+      const result = await GitHubUtilsClass.getRepositoryInfo();
 
       // Verify the result
       expect(result).toBeUndefined();
@@ -66,16 +68,17 @@ describe('GitHubUtils', () => {
       expect(showErrorStub.firstCall.args[0]).toContain('Test error');
 
       // Restore the original implementation
-      GitHubUtils.getRepositoryInfo = originalGetRepositoryInfo;
+      GitHubUtilsClass.getRepositoryInfo = originalGetRepositoryInfo;
     });
   });
 
   describe('dispatchWorkflow', () => {
     it('should dispatch a workflow successfully', async () => {
       // Mock dependencies
-      const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
-      const getRepoInfoStub = sandbox.stub(GitHubUtils, 'getRepositoryInfo');
-      getRepoInfoStub.resolves({ owner: 'your-username', repo: 'cicd-automation' });
+      const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage').callsFake((message: string) => {
+        console.log(message);
+      });
+      sandbox.stub(GitHubUtilsClass, 'getRepositoryInfo').resolves({ owner: 'your-username', repo: 'cicd-automation' });
 
       // Mock Octokit's createWorkflowDispatch
       const octokitMock = {
@@ -91,7 +94,7 @@ describe('GitHubUtils', () => {
       });
 
       // Call the method
-      const result = await GitHubUtils.dispatchWorkflow('test-workflow.yml');
+      const result = await GitHubUtilsClass.dispatchWorkflow('test-workflow.yml');
 
       // Verify the result
       expect(result).toBe(true);
@@ -101,9 +104,10 @@ describe('GitHubUtils', () => {
 
     it('should dispatch a workflow with inputs', async () => {
       // Mock dependencies
-      const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
-      const getRepoInfoStub = sandbox.stub(GitHubUtils, 'getRepositoryInfo');
-      getRepoInfoStub.resolves({ owner: 'your-username', repo: 'cicd-automation' });
+      const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage').callsFake((message: string) => {
+        console.log(message);
+      });
+      sandbox.stub(GitHubUtilsClass, 'getRepositoryInfo').resolves({ owner: 'your-username', repo: 'cicd-automation' });
 
       // Mock Octokit's createWorkflowDispatch
       const octokitMock = {
@@ -125,7 +129,7 @@ describe('GitHubUtils', () => {
       };
 
       // Call the method
-      const result = await GitHubUtils.dispatchWorkflow('test-workflow.yml', inputs);
+      const result = await GitHubUtilsClass.dispatchWorkflow('test-workflow.yml', inputs);
 
       // Verify the result
       expect(result).toBe(true);
@@ -136,11 +140,10 @@ describe('GitHubUtils', () => {
 
     it('should handle errors when repository info is not available', async () => {
       // Mock dependencies
-      const getRepoInfoStub = sandbox.stub(GitHubUtils, 'getRepositoryInfo');
-      getRepoInfoStub.resolves(undefined);
+      sandbox.stub(GitHubUtilsClass, 'getRepositoryInfo').resolves(undefined);
 
       // Call the method
-      const result = await GitHubUtils.dispatchWorkflow('test-workflow.yml');
+      const result = await GitHubUtilsClass.dispatchWorkflow('test-workflow.yml');
 
       // Verify the result
       expect(result).toBe(false);
@@ -148,9 +151,10 @@ describe('GitHubUtils', () => {
 
     it('should handle exceptions during workflow dispatch', async () => {
       // Mock dependencies
-      const showErrorStub = sandbox.stub(vscode.window, 'showErrorMessage');
-      const getRepoInfoStub = sandbox.stub(GitHubUtils, 'getRepositoryInfo');
-      getRepoInfoStub.resolves({ owner: 'your-username', repo: 'cicd-automation' });
+      const showErrorStub = sandbox.stub(vscode.window, 'showErrorMessage').callsFake((message: string) => {
+        console.error(message);
+      });
+      sandbox.stub(GitHubUtilsClass, 'getRepositoryInfo').resolves({ owner: 'your-username', repo: 'cicd-automation' });
 
       // Mock the createWorkflowDispatch function to throw an error
       const octokitMock = {
@@ -168,7 +172,7 @@ describe('GitHubUtils', () => {
       });
 
       // Call the method
-      const result = await GitHubUtils.dispatchWorkflow('test-workflow.yml');
+      const result = await GitHubUtilsClass.dispatchWorkflow('test-workflow.yml');
 
       // Verify the result
       expect(result).toBe(false);

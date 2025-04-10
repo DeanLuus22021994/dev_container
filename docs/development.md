@@ -11,6 +11,7 @@ This document covers the development workflow, best practices, and guidelines fo
 - [VS Code Extensions & Tools](#vs-code-extensions--tools)
 - [TypeScript Guidelines](#typescript-guidelines)
 - [Node.js Best Practices](#nodejs-best-practices)
+- [MCP Integration Diagrams](#mcp-integration-diagrams)
 
 ## Dev Container Setup
 
@@ -164,6 +165,23 @@ Key extensions include:
 - Use environment variables for configuration
 - Validate user inputs
 - Follow the principle of least privilege
+
+## MCP Integration Diagrams
+
+### Container Architecture
+
+Below is a visual representation of the MCP container architecture:
+
+```mermaid
+graph TD
+    A[User] -->|Interacts| B[VS Code Server]
+    B -->|Communicates| C[GitHub Server]
+    C -->|Triggers| D[Ollama Server]
+    D -->|Processes| E[PHI4-mini Model]
+    E -->|Returns| A
+```
+
+This diagram illustrates the flow of interactions between the user, VS Code server, GitHub server, and the Ollama server hosting the PHI4-mini model.
 
 ---
 

@@ -33,7 +33,7 @@ const REPO = process.env.GITHUB_REPO;
 /**
  * Utility functions for working with GitHub
  */
-export class GitHubUtils {
+export class GitHubUtilsClass {
   private static octokit: Octokit;
 
   /**
@@ -76,12 +76,12 @@ export class GitHubUtils {
       }
 
       const api = gitExtension.exports.getAPI(1);
-      const repo = api.repositories[0];
-      if (!repo) {
+      const gitRepo = api.repositories[0];
+      if (!gitRepo) {
         throw new Error('No Git repository found');
       }
 
-      const remoteUrl = repo.state.remotes[0]?.fetchUrl || repo.state.remotes[0]?.pushUrl;
+      const remoteUrl = gitRepo.state.remotes[0]?.fetchUrl || gitRepo.state.remotes[0]?.pushUrl;
       if (!remoteUrl) {
         throw new Error('No remote URL found');
       }

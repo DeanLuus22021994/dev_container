@@ -7,12 +7,9 @@
  * All functionality previously handled by VS Code tasks is now managed here.
  */
 
-const { exec, execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const { exec } = require('child_process');
 const { promisify } = require('util');
 const execAsync = promisify(exec);
-const os = require('os');
 
 // Node-fetch for Node.js < 18
 let nodeFetch;
@@ -24,9 +21,6 @@ try {
 
 // Configure longer timeouts for container operations
 jest.setTimeout(180000); // 3 minutes
-
-// Windows-specific command modifications
-const isWindows = os.platform() === 'windows' || process.platform === 'win32';
 
 /**
  * Execute a Docker command with Windows compatibility
@@ -110,9 +104,27 @@ async function fetchWithFallback(url, options = {}) {
 }
 
 /**
+ * Add multi-platform build validation logic
+ */
+async function validateMultiPlatformBuild() {
+  const platforms = ['linux/amd64', 'linux/arm64'];
+  for (const platform of platforms) {
+    console.log(`Validating build for platform: ${platform}`);
+    const result = await dockerCmd(`buildx build --platform ${platform} .`);
+    if (!result.success) {
+      throw new Error(`Build validation failed for platform: ${platform}`);
+    }
+  }
+}
+
+/**
  * Tests for Docker environment setup
  */
 describe('MCP Environment Setup', () => {
+  beforeAll(async () => {
+    await validateMultiPlatformBuild();
+  });
+
   test('Docker is running', async () => {
     const result = await dockerCmd('info', true);
     expect(result.success).toBeTruthy();
@@ -179,7 +191,7 @@ describe('MCP Environment Setup', () => {
 
   test('Check GPU availability', async () => {
     try {
-      const gpuResult = await execAsync('nvidia-smi');
+      await execAsync('nvidia-smi');
       console.log('NVIDIA GPU detected');
       process.env.GPU_AVAILABLE = 'true';
     } catch (error) {

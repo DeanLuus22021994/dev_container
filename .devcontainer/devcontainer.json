@@ -1,6 +1,6 @@
 {
   "name": "CI/CD Automation",
-  "image": "${localEnv:DOCKER_REGISTRY}/${localEnv:DOCKER_USERNAME}/cicd-automation:latest",
+  "image": "node:slim@sha256:<specific-hash>",
   "workspaceFolder": "/app",
   
   "customizations": {
@@ -11,7 +11,10 @@
         "ms-vscode.vscode-typescript-next",
         "github.vscode-github-actions",
         "ms-azuretools.vscode-docker",
-        "ms-vscode-remote.remote-containers"
+        "ms-vscode-remote.remote-containers",
+        "ms-vscode.cpptools",
+        "eamodio.gitlens",
+        "streetsidesoftware.code-spell-checker"
       ],
       "settings": {
         "editor.formatOnSave": true,

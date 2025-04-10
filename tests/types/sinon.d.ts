@@ -16,10 +16,6 @@ declare global {
        * Run the test concurrently.
        */
       concurrent: It;
-      /**
-       * Each test will be retried if it fails.
-       */
-      retry(times: number): It;
     }
   }
 }
@@ -36,8 +32,5 @@ declare module 'sinon' {
      * Creates a new fake that will replace obj[method] with a function that will invoke callback when called.
      */
     stub(): sinon.SinonStub;
-    stub(obj: any): sinon.SinonStub;
-    stub(obj: any, method: string): sinon.SinonStub;
-    stub(obj: any, method: string, func: Function): sinon.SinonStub;
   }
 }

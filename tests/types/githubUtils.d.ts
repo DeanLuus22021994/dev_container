@@ -16,10 +16,6 @@ export type GitHubUtilsPrivate = {
 
 // Augment the GitHubUtils class for testing purposes
 declare module '../../src/utils/githubUtils' {
-  interface GitHubUtils {
-    // No instance members needed
-  }
-
   // Add static properties for testing
   interface GitHubUtilsConstructor {
     octokit: Octokit;

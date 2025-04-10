@@ -18,6 +18,7 @@ This directory contains all the documentation for the CI/CD Automation project. 
 - [Dev Container Setup](development.md#dev-container-setup)
 - [Local Development](development.md#local-development)
 - [VS Code Extensions & Tools](development.md#vs-code-extensions--tools)
+- [MCP Integration Diagrams](development.md#mcp-integration-diagrams)
 
 ### CI/CD Configuration
 

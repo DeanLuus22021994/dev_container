@@ -40,9 +40,20 @@ function setupEnv() {
     }
   }
   
+  // Consolidate shared Docker command logic
+  async function executeDockerCommand(command, options = {}) {
+    try {
+      const { stdout, stderr } = await execAsync(`docker ${command}`, options);
+      return { success: true, stdout, stderr };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
   module.exports = {
     setupEnv,
     setupTestDatabase,
     cleanupTests,
-    setupMCP
+    setupMCP,
+    executeDockerCommand
   };

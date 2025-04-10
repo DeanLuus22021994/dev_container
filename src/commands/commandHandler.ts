@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { GitHubUtils } from '../utils/githubUtils';
+import { GitHubUtilsClass } from '../utils/githubUtils';
 
 /**
  * Class handling commands for the CI/CD Automation extension
@@ -55,9 +55,9 @@ export class CommandHandler {
       vscode.window.showInformationMessage(`Running workflow: ${selectedWorkflow}`);
 
       // Run the selected workflow using GitHubUtils
-      const repoInfo = await GitHubUtils.getRepositoryInfo();
+      const repoInfo = await GitHubUtilsClass.getRepositoryInfo();
       if (repoInfo) {
-        const result = await GitHubUtils.dispatchWorkflow(selectedWorkflow);
+        const result = await GitHubUtilsClass.dispatchWorkflow(selectedWorkflow);
         if (result) {
           vscode.window.showInformationMessage(`Successfully dispatched ${selectedWorkflow}`);
         } else {
