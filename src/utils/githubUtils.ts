@@ -86,14 +86,15 @@ export class GitHubUtils {
         throw new Error('No remote URL found');
       }
 
-      const match = /github\.com[:/](?<owner>[^/]+)\/(?<repo>[^/.]+)(\.git)?/.exec(remoteUrl);
-      if (!match?.groups) {
+      // Using standard capturing groups instead of named groups for compatibility
+      const match = /github\.com[:/]([^/]+)\/([^/.]+)(\.git)?/.exec(remoteUrl);
+      if (!match || match.length < 3) {
         throw new Error('Invalid GitHub remote URL');
       }
 
       return {
-        owner: match.groups.owner,
-        repo: match.groups.repo,
+        owner: match[1],
+        repo: match[2],
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);

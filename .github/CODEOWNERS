@@ -1,15 +1,23 @@
-# CODEOWNERS
+# Default ownership
 
 * @project-admin
 
-## Documentation
+## GitHub workflows and configurations
+
+/.github/ @team-devops
+
+## Agent component ownership
+
+/agent/ @team-agent-maintainers
+
+## Source code ownership
+
+/src/ @team-extension-maintainers
+
+## Test files ownership
+
+/tests/ @team-qa
+
+## Documentation ownership
 
 /docs/ @team-docs
-
-## Source code
-
-/src/ @team-developers
-
-## MCP Tools
-
-/.vscode/mcp.json @team-developers

@@ -7,5 +7,19 @@
     "no-console": "off",
     "no-unused-vars": "warn"
   },
-  "ignorePatterns": ["out/", "dist/", "node_modules/"]
+  "ignorePatterns": ["out/", "dist/", "node_modules/"],
+  "env": {
+    "node": true,
+    "jest": true,
+    "browser": true,
+    "es6": true
+  },
+  "globals": {
+    "process": true,
+    "require": true,
+    "module": true,
+    "__dirname": true,
+    "globalThis": true,
+    "fetch": true
+  }
 }

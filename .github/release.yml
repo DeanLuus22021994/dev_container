@@ -23,11 +23,3 @@ changelog:
     - title: "📝 Other Changes"
       labels:
         - "*"
-
-# .github/CODEOWNERS
-* @project-admin
-/.github/ @team-devops
-/agent/ @team-agent-maintainers
-/src/ @team-extension-maintainers
-/tests/ @team-qa
-/docs/ @team-docs
