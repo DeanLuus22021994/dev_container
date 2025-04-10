@@ -2,30 +2,13 @@ version: '3.8'
 
 services:
   app:
-    image: deanluus22021994/cloudbuild:latest
+    image: node:slim
     volumes:
-      - ..:/workspace:cached
-      - ${HOME}/.ssh:/home/vscode/.ssh:ro
-      - ${HOME}/.gitconfig:/home/vscode/.gitconfig:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ..:/app
     environment:
-      - PERSONAL_ACCESS_TOKEN
-      - DOCKER_ACCESS_TOKEN
-      - DOCKER_USERNAME
-      - SSH_DEV_CONTAINER_REPO
-      - OWNER
-      - DOCKER_REGISTRY
-      - DOCKER_HOST=tcp://host.docker.internal:2375
-      - DEBUG=true
+      - NODE_ENV=development
       - PORT=3000
-      - LOG_LEVEL=debug
     command: sleep infinity
-    network_mode: host
-    user: vscode
-    restart: unless-stopped
-    init: true
-    privileged: true
-    cap_add:
-      - ALL
-    security_opt:
-      - seccomp=unconfined
+    working_dir: /app
+    ports:
+      - "3000:3000"

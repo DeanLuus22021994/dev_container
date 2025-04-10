@@ -1,43 +1,33 @@
-# CI/CD Automated Project with Dev Container
+# CI/CD Automation
 
-This project demonstrates a fully automated CI/CD setup using GitHub Actions and development containers for consistent development environments.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Documentation](#documentation)
-- [Quick Start](#quick-start)
-- [Repository Structure](#repository-structure)
+A streamlined, low-code approach to CI/CD automation with DevContainers.
 
 ## Overview
 
-This repository contains a CI/CD automation setup focused on development containers with:
+This project provides a minimal setup for CI/CD automation with focus on:
 
-- GitHub Actions workflow integration
-- Jest-based testing framework
-- Docker containerization
-- Environment variable validation
+- Simple Docker containerization
+- Straightforward GitHub Actions workflows
+- Low-maintenance DevContainer setup
+- Essential VS Code extension capabilities
 
-For complete details on features and capabilities, see the [Documentation](#documentation) section.
+## Getting Started
+
+1. Clone this repository
+2. Copy `.env.example` to `.env` and configure your environment variables
+3. Open in VS Code and use "Reopen in Container" when prompted
+4. Run `npm install` if not automatically done
 
 ## Documentation
 
-All project documentation is organized in the [`docs/`](docs/) folder. See the [Documentation Index](docs/README.md) for a complete guide.
+See the [docs](docs/) folder for detailed information.
 
-| Document | Description |
-|----------|-------------|
-| [CI/CD Setup Guide](docs/cicd-setup.md) | Configuration for CI/CD workflows and environment variables |
-| [Development Guide](docs/development.md) | Development workflow and best practices |
-| [Testing Guide](docs/testing.md) | Testing strategies and configuration |
-| [Troubleshooting](docs/troubleshooting.md) | Common issues and their solutions |
+## Development
 
-## Quick Start
+- Source code is in the `src/` directory
+- Tests are in the `tests/` directory
+- Configuration files are in the root directory
 
-1. Ensure prerequisites are installed (see [Development Guide](docs/development.md#dev-container-setup))
-2. Clone this repository
-3. Configure environment variables (see [CI/CD Setup Guide](docs/cicd-setup.md))
-4. Open in VS Code and use "Reopen in Container" when prompted
+## Contributing
 
-## Repository Structure
-
-See [Documentation Index](docs/README.md) for a detailed breakdown of the repository structure and available documentation.
+Please follow the guidelines in [Development Guide](docs/development.md).

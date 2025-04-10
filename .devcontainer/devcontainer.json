@@ -1,72 +1,27 @@
 {
-  "name": "GitHub Copilot Optimized Environment",
-  "image": "deanluus22021994/cloudbuild:latest",
-  "workspaceFolder": "/workspace",
-
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "version": "latest",
-      "moby": true,
-      "dockerDaemonConfigFile": "/etc/docker/daemon.json"
-    },
-    "ghcr.io/devcontainers/features/github-cli:1": {
-      "version": "latest"
-    }
-  },
-
+  "name": "CI/CD Automation",
+  "image": "node:slim",
+  "workspaceFolder": "/app",
+  
   "customizations": {
     "vscode": {
       "extensions": [
-        "github.copilot",
-        "github.copilot-chat",
-        "github.copilot-labs",
-        "ms-azuretools.vscode-docker",
         "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "eamodio.gitlens",
-        "orta.vscode-jest",
-        "visualstudioexptteam.vscodeintellicode",
-        "rvest.vs-code-prettier-eslint",
-        "christian-kohler.npm-intellisense"
+        "esbenp.prettier-vscode"
       ],
       "settings": {
-        "github.copilot.enable": {
-          "*": true,
-          "yaml": true,
-          "plaintext": true,
-          "markdown": true
-        },
-        "github.copilot.advanced": {
-          "inlineSuggestCount": 5,
-          "listCount": 10
-        },
-        "github.copilot.chat.functions.enabled": true,
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": "explicit"
-        },
-        "editor.rulers": [100],
-        "editor.tabSize": 2,
-        "terminal.integrated.defaultProfile.linux": "bash"
+          "source.fixAll.eslint": true
+        }
       }
     }
   },
-
-  "postCreateCommand": "bash -c 'if [ -f \"${containerWorkspaceFolder}/.env\" ]; then set -a; source \"${containerWorkspaceFolder}/.env\"; set +a; fi && echo \"Environment loaded successfully\" > /workspace/.devcontainer/logs/container-ready.log'",
-
+  
   "remoteEnv": {
-    "PATH": "${containerEnv:PATH}:${containerWorkspaceFolder}/node_modules/.bin",
-    "DOTENV_CONFIG_PATH": "${containerWorkspaceFolder}/.env"
+    "PATH": "${containerEnv:PATH}:/app/node_modules/.bin"
   },
-
-  "mounts": [
-    "source=${localWorkspaceFolder}/.env,target=/workspace/.env,type=bind,consistency=cached",
-    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
-    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
-    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind,consistency=consistent"
-  ],
-
-  "forwardPorts": [3000, 8080],
-  "runArgs": ["--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined", "--privileged"],
-  "remoteUser": "vscode"
+  
+  "postCreateCommand": "npm install",
+  "forwardPorts": [3000]
 }

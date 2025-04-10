@@ -1,17 +1,8 @@
 # Default owners for everything
 * @project-admin
 
-# DevOps related files
-/.github/ @team-devops
-
-# Agent component
-/agent/ @team-agent-maintainers
-
-# Extension source code
-/src/ @team-extension-maintainers
-
-# Tests
-/tests/ @team-qa
-
 # Documentation
 /docs/ @team-docs
+
+# Source code
+/src/ @team-developers

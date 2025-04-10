@@ -1,60 +1,28 @@
-# Ignore all files and directories in root
-/*
-
-# But don't ignore these files
-!.gitignore
-!package.json
-!tsconfig.json
-!README.md
-!Dockerfile
-
-# Don't ignore these directories
-!src/
-!tests/
-!docs/
-!.github/
-!.architechture/
-!.devcontainer/
-!.eslintrc.json
-
-# Node.js dependencies and build outputs
+# Dependencies
 node_modules/
+
+# Builds
 dist/
 out/
 coverage/
-coverage-integration/
-temp/
 
 # Environment files
 .env
 .env.*
 !.env.example
 
-# Logs and debugging
+# Logs
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-.pnpm-debug.log*
 
-# IDE directories
-.idea/
+# IDE
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
-!.vscode/tasks.json
 !.vscode/launch.json
-*.iml
-*.iws
-*.ipr
+.idea/
 .vs/
 
-# OS generated files
+# OS files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
