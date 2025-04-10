@@ -10,6 +10,7 @@ This document provides solutions to common issues you might encounter when worki
 - [Environment Variable Problems](#environment-variable-problems)
 - [Testing Issues](#testing-issues)
 - [Common Error Messages](#common-error-messages)
+- [MCP System Startup Issues](#mcp-system-startup-issues)
 - [Getting Help](#getting-help)
 
 ## GitHub Actions Workflow Issues
@@ -228,6 +229,168 @@ This document provides solutions to common issues you might encounter when worki
 1. Check file permissions: `chmod +x scripts/*.js`
 2. Use sudo only if necessary (avoid when possible)
 3. Check ownership of files: `chown -R $(whoami) .`
+
+## MCP System Startup Issues
+
+If you're experiencing issues with your MCP system not starting properly, follow these troubleshooting steps:
+
+### Quick Diagnostics
+
+Run the diagnostic script to identify potential issues:
+
+```bash
+npm run diagnose
+```
+
+This will check:
+
+- Docker installation and availability
+- Docker Compose availability
+- Required environment variables
+- Docker network and volume setup
+- MCP container status
+
+### Common Issues and Solutions
+
+#### 1. Docker Environment Issues
+
+**Symptoms:**
+
+- Docker commands fail
+- "Cannot connect to Docker daemon" errors
+
+**Solutions:**
+
+- Verify Docker Desktop is running
+- Check if Docker service is running with `systemctl status docker` (Linux) or `sc query docker` (Windows)
+
+#### 2. Missing Environment Variables
+
+**Symptoms:**
+
+- "Unauthorized" errors in container logs
+- Authentication-related startup failures
+
+**Solutions:**
+
+- Ensure all required environment variables are set in `.env` file:
+  - `REDIS_PASSWORD`
+  - `GITHUB_TOKEN` or `PERSONAL_ACCESS_TOKEN`
+  - `DOCKER_USERNAME`
+  - `DOCKER_REGISTRY`
+
+#### 3. Docker Network Conflicts
+
+**Symptoms:**
+
+- Containers can't communicate with each other
+- "Network not found" errors
+
+**Solutions:**
+
+- Stop all containers: `npm run mcp:stop`
+- Remove existing networks: `docker network rm mcp-network`
+- Create fresh network: `docker network create mcp-network`
+- Restart containers: `npm run mcp:start`
+
+#### 4. Port Conflicts
+
+**Symptoms:**
+
+- "Port is already allocated" errors
+- Services fail to start due to port binding issues
+
+**Solutions:**
+
+- Check for processes using conflicting ports:
+  - Windows: `netstat -ano | findstr "PORT_NUMBER"`
+  - Linux/macOS: `lsof -i :PORT_NUMBER`
+- Stop the conflicting process or modify the port mappings in docker-compose.yml
+
+#### 5. Volume Permissions
+
+**Symptoms:**
+
+- Permission denied errors in container logs
+- File access issues
+
+**Solutions:**
+
+- Check volume permissions: `docker volume inspect mcp-redis-data`
+- Remove and recreate volumes if necessary
+
+#### 6. GPU/Ollama Issues
+
+**Symptoms:**
+
+- Ollama container not starting
+- "GPU not available" errors
+
+**Solutions:**
+
+- Check NVIDIA drivers are installed (if using GPU): `nvidia-smi`
+- Try running Ollama without GPU by removing `--gpus all` option
+- Pull the model manually: `docker exec mcp-ollama ollama pull phi4-mini`
+
+### Advanced Troubleshooting
+
+If the issues persist, you can try these additional steps:
+
+1. Review full container logs:
+
+   ```bash
+   docker logs mcp-redis
+   docker logs mcp-gateway
+   docker logs mcp-ollama
+   # etc.
+   ```
+
+2. Reset the entire MCP environment:
+
+   ```bash
+   # Stop all containers
+   npm run mcp:stop
+   
+   # Remove all volumes
+   docker volume rm mcp-redis-data ollama-models
+   
+   # Remove network
+   docker network rm mcp-network
+   
+   # Start fresh
+   npm run mcp:start
+   ```
+
+3. Check Docker system information:
+
+   ```bash
+   docker info
+   docker system df
+   ```
+
+4. Verify MCP configuration:
+
+   ```bash
+   cat .vscode/mcp.json
+   ```
+
+## Reporting Issues
+
+If you're still experiencing problems after following these steps, please report the issue with:
+
+1. Output from diagnostic tool: `npm run diagnose > diagnostic-output.txt`
+2. Docker logs of relevant containers
+3. Your environment information (OS, Docker version, etc.)
+4. Steps to reproduce the issue
+
+## Quick Commands
+
+| Command | Purpose |
+|---------|---------|
+| `npm run mcp:start` | Start all MCP containers |
+| `npm run mcp:stop` | Stop all MCP containers |
+| `npm run mcp:restart` | Restart all MCP containers |
+| `npm run diagnose` | Run diagnostic checks |
 
 ## Getting Help
 

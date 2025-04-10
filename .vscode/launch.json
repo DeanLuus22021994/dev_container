@@ -81,6 +81,8 @@
     {
       "name": "Debug Extension + MCP Servers",
       "configurations": ["Extension with MCP"],
+      "preLaunchTask": "mcp: start all",
+      "postDebugTask": "mcp: stop all",
       "stopAll": true
     }
   ]

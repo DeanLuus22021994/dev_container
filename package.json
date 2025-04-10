@@ -8,7 +8,9 @@
     "vscode": "^1.75.0"
   },
   "main": "./out/extension.js",
-  "categories": ["Other"],
+  "categories": [
+    "Other"
+  ],
   "contributes": {
     "commands": [
       {
@@ -40,10 +42,22 @@
     "watch": "tsc -watch -p ./",
     "test": "jest",
     "test:integration": "jest --config jest.integration.config.js",
+    "test:mcp": "jest --config jest.mcp.config.js",
+    "test:mcp:start": "cross-env MCP_TEST_CLEANUP=false jest --config jest.mcp.config.js",
+    "test:mcp:stop": "cross-env MCP_TEST_CLEANUP=true jest --testNamePattern='MCP System Cleanup' --config jest.mcp.config.js",
+    "test:mcp:diag": "cross-env MCP_TEST_DIAG_ONLY=true jest --testNamePattern='MCP Environment Setup|MCP System Validation' --config jest.mcp.config.js",
     "lint": "eslint src --ext ts,js",
     "format": "prettier --write \"**/*.{ts,js,json,md}\"",
     "build": "npm run compile",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "diagnose": "node scripts/diagnose-mcp.js",
+    "docker:clean": "node scripts/cleanup-docker.js",
+    "docker:clean:ci": "node scripts/cleanup-docker-ci.js",
+    "mcp:clean": "npm run docker:clean && npm run mcp:start",
+    "mcp:clean:ci": "npm run docker:clean:ci && npm run mcp:start",
+    "mcp:start": "npm run test:mcp:start",
+    "mcp:stop": "npm run test:mcp:stop",
+    "mcp:restart": "npm run mcp:stop && npm run mcp:start"
   },
   "dependencies": {
     "@octokit/rest": "^20.0.0",
@@ -56,8 +70,12 @@
     "@types/vscode": "^1.75.0",
     "@typescript-eslint/eslint-plugin": "^5.59.9",
     "@typescript-eslint/parser": "^5.59.9",
+    "cross-env": "^7.0.3",
     "eslint": "^8.50.0",
     "jest": "^29.7.0",
+    "jest-cli": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "node-fetch": "^3.3.2",
     "prettier": "^3.0.3",
     "sinon": "^20.0.0",
     "supertest": "^6.3.3",
