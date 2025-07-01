@@ -156,7 +156,7 @@ jobs:
           EOL
           
       - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "Update dev container configuration for VSCode Insiders integration"
           file_pattern: .devcontainer/devcontainer.json .vscode/settings.json
